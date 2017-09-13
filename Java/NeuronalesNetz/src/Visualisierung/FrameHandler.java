@@ -8,17 +8,19 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class FrameHandler{
+public class FrameHandler {
 	
 	Keylistener key = new Keylistener();
-	KeyHandler KH = new KeyHandler(this , key);
 	Mouselistener mouse = new Mouselistener();
+	KeyHandler KH = new KeyHandler(this , key , mouse);
 	JLabel text = new JLabel("Bereich Makieren"); 
 	JFrame frame ; 
     JPanel panel = new JPanel() {
@@ -35,6 +37,7 @@ public class FrameHandler{
 		frame = new JFrame(); 
 		frame.addKeyListener(key);
 		frame.addMouseListener(mouse);
+		frame.addMouseMotionListener(mouse);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		panel.setLayout(new BoxLayout(panel , BoxLayout.Y_AXIS));
 		frame.setContentPane(panel);
@@ -66,5 +69,6 @@ public class FrameHandler{
 		text.setText(str);
 		frame.repaint();
 	}
+
 	
 }

@@ -12,7 +12,7 @@ public class SichtFeld {
 	private long[] Pixels ; 
 	private DataBuffer buf ; 
 	
-	SichtFeld(int witdh , int height ){
+	public SichtFeld(int witdh , int height ){
 		dim = new Dimension(witdh , height);
 	}
 	
