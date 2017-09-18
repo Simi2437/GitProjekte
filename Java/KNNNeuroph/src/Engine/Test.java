@@ -1,5 +1,6 @@
 package Engine;
 
+import Fenster.RouletteAufnahme;
 import Training.LernVid;
 
 public class Test {
@@ -8,7 +9,7 @@ public class Test {
 	
 	public static void main(String[] args) {
 		
-		test = new LernVid(5, 10 , 10) ; 
+		RouletteAufnahme Fenster = new RouletteAufnahme();
 		
 	}
 
