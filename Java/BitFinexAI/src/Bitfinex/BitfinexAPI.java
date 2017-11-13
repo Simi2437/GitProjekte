@@ -1,5 +1,6 @@
 package Bitfinex;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -12,31 +13,41 @@ import java.util.Scanner;
 
 public class BitfinexAPI {
 	
+	private String Börse = "Bitfinex" ; 
 	private String MainLinkv1 =  "https://api.bitfinex.com/v1/" ;
 	private String MainLinkv2 = "https://api.bitfinex.com/v2/" ; 
 	
 	URL akturl; 
 	InputStream aktstr ; 
 	
+	private File KursDest = new File("bin/Kurs");
+	
 	private List<String> allSymbols = new ArrayList() ; 
 	
+	List<Candle> Kurs = new ArrayList() ; 
 	
 @SuppressWarnings("deprecation")
 //	Timestamps 1s = 1000ms ; 1min = 60000ms
 	
 //	SimpledayFormat schows time 
-	Date botStart = new Date(1483228800000l) ; // 01.01.2017 
-	Date Time1 = new Date(1510185600000l); 
-	Date Time2 = new Date(1509580800000l) ; 
+	Date botStart = new Date(1510604640000l) ; // 01.01.2017 
+	Date TimeHigh = new Date(1510604640000l); 
+	Date TimeLow = new Date(1510604640000l) ; 
 	
 	Calendar c = Calendar.getInstance() ; 
 	
 	public BitfinexAPI()
 	{
-		System.out.println(Time1.toString() + "    " + Time2.toString());
+		if(!KursDest.exists())
+		{
+			KursDest.mkdirs() ; 
+		}
 	}
 	
-	public List
+	public void loadCandels()
+	{
+		
+	}
 	
 	public List<String> getAllCurrencys() throws IOException
 	{
