@@ -3,9 +3,12 @@ package Fenster;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,8 @@ public class DSRepresenter extends JPanel implements ActionListener, ChangeListe
 	
 	private int ButtonWidth = 50; 
 	private BufferedImage img ;
+	
+	private boolean stateChanged = false ; 
 	
 	boolean[] outputStat ;
 	private String [] OutputNamen; 
@@ -61,7 +66,7 @@ public class DSRepresenter extends JPanel implements ActionListener, ChangeListe
 		this.add(BUB, BorderLayout.CENTER);
 		
 		//JSlider Einfügen
-		FrNbr = new JSlider( 0 , Frames , 0) ; 
+		FrNbr = new JSlider( 0 , Frames - 1 , 0) ; 
 		FrNbr.setMajorTickSpacing(1);
 		FrNbr.setPaintTicks(true);
 		FrNbr.addChangeListener(this);
@@ -72,7 +77,18 @@ public class DSRepresenter extends JPanel implements ActionListener, ChangeListe
 	public void setIMG(BufferedImage img)
 	{
 		this.img = img ; 
-		this.repaint(); 
+//		else
+//		{
+//			this.getGraphics().drawImage(img, 0 , 0 , this) ; 
+//			System.out.println("Bild müsste dasein");
+////			this.getParent().repaint();
+////			this.repaint(); 
+//		}
+	}
+	public void paint(Graphics g)
+	{
+		super.paint(g) ; 
+		if(img != null)g.drawImage(img, 0 , 0 , this);
 	}
 	public void addOutputs(String[] args)
 	{
@@ -102,14 +118,38 @@ public class DSRepresenter extends JPanel implements ActionListener, ChangeListe
 		}
 		
 	}
-	public int getChoosenFrame()
-	{
-		return this.Framenbr ; 
-	}
 	@Override
 	public void stateChanged(ChangeEvent e) 
 	{
 		this.Framenbr = FrNbr.getValue() ; 
+//		System.out.println(FrNbr.getValue());
+		this.stateChanged = true ; 
 		this.getParent().getParent().getParent().getParent().requestFocus();
 	}
+	public int getSchieberNbr()
+	{
+		return this.Framenbr ; 
+	}
+	public boolean getstateChanged()
+	{
+		if(this.stateChanged)
+		{
+			this.stateChanged = false ; 
+			return true ; 
+		}
+		return false ; 
+	}
+	
+	
+//	protected void paintComponent(Graphics g) {
+//		super.paintComponent(g); 
+//		setOpaque(false);
+//		Graphics2D g2d = (Graphics2D) g.create();
+//		
+//		if(this.img != null)
+//		{
+////			System.out.println("Bild müsste gezeichnet werden");
+////			g2d.drawImage(img, 0, 0, this);
+//		}
+//	}
 }

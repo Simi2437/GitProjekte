@@ -1,6 +1,7 @@
 package Technik;
 
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -11,6 +12,8 @@ import java.util.Scanner;
 
 import org.neuroph.core.data.BufferedDataSet;
 import org.neuroph.core.data.DataSet;
+
+import Training.TrainingsSetConverter;
 
 public class RouletteDaten {
 	private Rectangle MainView ;
@@ -29,7 +32,7 @@ public class RouletteDaten {
 	//Daten über Trainingsdaten
 	public static int output = 40 , input , bufferSize; 
 	// DatenSet für KNN 
-	private BufferedDataSet allData ; 
+	private DataSet allData; 
 	
 	public RouletteDaten(String Projekt , Rectangle Rect)
 	{
@@ -55,11 +58,15 @@ public class RouletteDaten {
 		if(this.ProjektName.exists())
 		{
 			setVideoFiles(new File(this.getGrundVerzeichnis() + "/" + Projekt + "/VideoFiles"));
-			System.out.println("Video Files" + this.getVideoFiles().getPath());
+//			System.out.println("Video Files" + this.getVideoFiles().getPath());
 			setProperties(new File(this.getGrundVerzeichnis() + "/" + Projekt + "/Properties" + "/" + this.PropName)); 
 			
 			Scanner Sc = new Scanner(this.getProperties()) ;
 			String rectP = Sc.nextLine() ; 
+			
+			input = Integer.parseInt(rectP.substring(rectP.indexOf("I:") + 2 , rectP.indexOf("O:"))) ;
+			output = Integer.parseInt(rectP.substring(rectP.indexOf("O:")+2 , rectP.length())) ; 
+			
 			
 			int x = Integer.parseInt(rectP.substring(rectP.indexOf("X:") + 2 , rectP.indexOf("Y"))   ); 
 			int y = Integer.parseInt(rectP.substring(rectP.indexOf("Y:") + 2 , rectP.indexOf("W"))   );
@@ -88,18 +95,47 @@ public class RouletteDaten {
 	}
 	private void loadAllTrainingsData()
 	{
-		for(int i = 0 ; i < this.VideoFiles.listFiles().length ; i++)
+		for(int i = 0 ; i<this.VideoFiles.listFiles().length ; i++)
 		{
-			this.allData.load(this.VideoFiles.listFiles()[i].getPath()) ; 
+			if(i == 0)
+			{
+				this.allData = DataSet.load(this.VideoFiles.listFiles()[i].getPath()) ; 
+			}
+			else
+			{
+				DataSet buf = DataSet.load(this.VideoFiles.listFiles()[i].getPath());
+				for(int y = 0 ; y < buf.getRows().size() ; y++)
+				{
+					this.allData.addRow(buf.getRowAt(y)) ; 
+				}
+			}
+//			System.out.println(this.allData.getRows().size());
 		}
-		System.out.println("Video wurde gepuffert Geladen");
+		
+		System.out.println("Daten wurden geladen.");
+		
 	}
 	public void addTrainingsSet(DataSet data)
 	{
-		data.save(this.VideoFiles.getPath() + "/Video" + this.VideoFiles.listFiles().length + ".tset");
+		
+		for(int i = 0 ; i<data.size() ; i++)
+		{
+			for(int y = 0 ; y<data.getInputSize() ; y++)
+			{
+				if(data.getRowAt(i).getInput()[y] != data.getRowAt(i + 1).getInput()[y])
+				{
+					System.out.println("Reihe unterscheidet sich in row: " + y + "");
+				}
+						
+			}
+		}
+		
+		
+		data.saveAsTxt(this.VideoFiles.getPath() + "/Video" + this.VideoFiles.listFiles().length + ".tset" , ";");
+		
 		data.clear();
 		System.out.println("Video wurde Gespeichert,  RestDateien:" + data.size());
-//		this.loadAllTrainingsData(); 
+		this.loadAllTrainingsData(); 
 	}
 	public void setBufferSize(int i)
 	{
@@ -150,5 +186,17 @@ public class RouletteDaten {
 		outNames[39] = "Kugel Läuft" ; 
 		
 		return outNames ; 
+	}
+	public BufferedImage getImage(int nbr)
+	{
+//		System.out.println(this.MainView.height);
+//		System.out.println( this.MainView.width);
+//		System.out.println(this.allData.size());
+//		System.out.println( " WTF :: " + this.allData.getRowAt(5));
+		return TrainingsSetConverter.getIMGFromDS(this.allData.get(nbr), this.MainView.width, this.MainView.height);
+	}
+	public int getDataSetSize()
+	{
+		return this.allData.size(); 
 	}
 }

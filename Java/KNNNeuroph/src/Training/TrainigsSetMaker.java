@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.neuroph.core.data.BufferedDataSet;
 import org.neuroph.core.data.DataSet;
 
 import Technik.ScreenCam;
@@ -32,6 +33,7 @@ public class TrainigsSetMaker implements Runnable {
 	private int RGB ;
 	
 	DataSet Training; 
+	BufferedDataSet BufTraining ; 
 	ArrayList<VideoImage> Vid ; 
 	
 	public TrainigsSetMaker(ScreenCam Kamera , File Projekt , File Videos , int Output)
@@ -71,9 +73,11 @@ public class TrainigsSetMaker implements Runnable {
 		//Buffer Füllen und Video verkleinern
 		if(!Vid.isEmpty())
 		{
-			System.out.println("Buffer müsste größer werden " + "VId get:" + Vid.get(0));
+//			System.out.println("Buffer müsste größer werden " + "VId get:" + Vid.get(0));
 			buf.add(Vid.get(0));
+			
 			Vid.remove(0); 
+			
 			try {
 				Thread.sleep(0);
 			} catch (InterruptedException e) {
@@ -103,6 +107,7 @@ public class TrainigsSetMaker implements Runnable {
 					for(int y = 0 ; y < this.height ; y++)
 					{
 						RGB = buf.get(nbr ).getBufferedImage().getRGB(x, y);
+						
 						RowInput[ nbr*3*height*width + 3*x*this.height + 3*y ] = (double)((RGB & 0x00FF0000) / 0x10000)/(double)255 ; 
 						RowInput[ nbr*3*height*width + 3*x*this.height + 3*y + 1] =(double)((RGB &0x0000FF00) / 0x100)/(double)255 ;
 						RowInput[ nbr*3*height*width + 3*x*this.height + 3*y + 2] =(double)(RGB &0x000000FF) / (double)255 ; 
@@ -128,13 +133,16 @@ public class TrainigsSetMaker implements Runnable {
 			
 			for(int z = 0 ; z < RowInput.length ; z++)
 			{
-//				System.out.println("" + RowInput[z]);
+//				
 			}
-			System.out.println("Sollte sein: " + (this.HowMuchFrames * ( 3* width*height) + (this.HowMuchFrames - 1)) + "    Ist: " + RowInput.length + "  KameraFrames:" + Vid.size() + "   Buffer:"+ buf.size());
-
+//			System.out.println("Sollte sein: " + (this.HowMuchFrames * ( 3* width*height) + (this.HowMuchFrames - 1)) + "    Ist: " + RowInput.length + "  KameraFrames:" + Vid.size() + "   Buffer:"+ buf.size());
+			
+			
+//			dataset überprüfen
+			
 			//DataSet Schreiben
 			this.Training.addRow(RowInput , this.RowErgebnis) ;
-			
+//			this.BufTraining.addRow(RowInput, RowErgebnis);
 		}
 	}
 	}
@@ -153,6 +161,10 @@ public class TrainigsSetMaker implements Runnable {
 	public DataSet getDataSet()
 	{
 		return this.Training ; 
+	}
+	public BufferedDataSet getBufferedDataSet()
+	{
+		return BufTraining ; 
 	}
 	public void Save()
 	{

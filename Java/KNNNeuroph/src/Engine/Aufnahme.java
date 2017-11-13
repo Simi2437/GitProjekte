@@ -8,6 +8,7 @@ import Fenster.RouletteAufnahme;
 import Technik.RouletteDaten;
 import Technik.ScreenCam;
 import Training.TrainigsSetMaker;
+import Training.TrainingsSetConverter;
 
 public class Aufnahme {
 	
@@ -103,8 +104,17 @@ public class Aufnahme {
 			//Video Laden
 			if(Fenster.getOutputSetzen())
 			{
-				if(VisualDS == null)VisualDS = new DSRepresenter(Roulette.getMainView().width , Roulette.getMainView().height , Roulette.getStatusStrings() , Roulette.output) ; 
+				if(VisualDS == null)
+					{
+						VisualDS = new DSRepresenter(Roulette.getMainView().width , Roulette.getMainView().height , Roulette.getStatusStrings() , Roulette.getDataSetSize()) ; 
+						VisualDS.setIMG(Roulette.getImage(VisualDS.getSchieberNbr()));
+					}
 				if(!Fenster.addContent(VisualDS));
+				
+				if(VisualDS.getstateChanged())
+				{
+					VisualDS.setIMG(Roulette.getImage(VisualDS.getSchieberNbr()));
+				}
 			}
 			
 			
