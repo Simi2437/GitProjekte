@@ -19,26 +19,24 @@ public class BitfinexReader {
 	
 	public static void main(String args[]) throws UnknownHostException, IOException
 	{
-		URL add = new URL("https://api.bitfinex.com/v2") ;
-		Socket s = new Socket(add.getHost() , 80);
 		
-		InputStream is = s.getInputStream() ;
-		OutputStream os = s.getOutputStream() ; 
+		String url = "https://api.bitfinex.com/v2/ticker/tBTCUSD" ; 
+		
+		String operation = "platform/status" ; 
+		
+		URL add = new URL(url) ;
+//		Socket s = new Socket(add.getHost() , 80);
 		
 		
-		PrintWriter write = new PrintWriter(os);
-		Scanner read = new Scanner(is) ;
 		
-		write.printf("{\r\n" + 
-				"  \"event\": \"subscribe\",\r\n" + 
-				"  \"channel\": \"ticker\",\r\n" + 
-				"  \"symbol\": \"tBTCUSD\"\r\n" + 
-				"}");
+		InputStream is = add.openStream() ;
+//		OutputStream os = s.getOutputStream() ; 
 		
-		while(read.hasNextLine())
-		{
-			System.out.println(read.nextLine()) ;
-		}
+		
+		System.out.println(new Scanner(is).nextLine());
+		
+		is.close();
+		
 		
 	}
 }
