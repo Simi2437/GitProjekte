@@ -13,7 +13,7 @@ public class BitFinexTest {
 		
 		bapi.isOperating() ; 
 		bapi.getAllCurrencys() ; 
-		
+		bapi.loadCandels(); 
 	}
 
 }

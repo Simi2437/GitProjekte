@@ -46,7 +46,62 @@ public class BitfinexAPI {
 	
 	public void loadCandels()
 	{
+		URL bufUrl = null;
 		
+		try {
+			bufUrl = new URL("https://api.bitfinex.com/v2/candles/trade:1m:tBTCUSD/hist");
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} 
+		
+		List<String> bufStr = getElements(bufUrl) ; 
+		
+		for(int i = 0 ; i < bufStr.size() ; i++)
+		{
+			System.out.println(bufStr.get(i) + " 1 + i/4 = " + (1+i/6));
+		}
+		
+	}
+	
+	
+	
+	
+	private List<String> getElements(URL url)
+	{
+		
+		try {
+			aktstr = url.openStream() ;
+		} catch (IOException e) {
+			
+			return null ; 
+			
+//			e.printStackTrace();
+			
+		} 
+		
+		List<String> StrList = new ArrayList();
+		
+//		System.out.println(new Scanner(aktstr).nextLine());
+		
+		String readedString = new Scanner(aktstr).nextLine(); 
+		String buffer = "" ; 
+		
+		for(int i = 0 ; readedString.length() > i ; i++)
+		{
+			if(readedString.charAt(i) == '[' || readedString.charAt(i) == '"'|| readedString.charAt(i) == ',' || readedString.charAt(i) == ']')
+			{
+				if(buffer != "")
+					{
+						StrList.add(buffer) ; 
+						buffer = "" ; 
+					}
+			}
+			else
+			{
+				buffer = buffer + readedString.charAt(i) ; 
+			}
+		}
+		return  StrList ; 
 	}
 	
 	public List<String> getAllCurrencys() throws IOException
@@ -62,15 +117,10 @@ public class BitfinexAPI {
 		
 		for(int i = 0 ; symb.length() > i ; i++)
 		{
-			
-
-//			System.out.println("Symbole lesen");
-			
-			if(symb.charAt(i) == '[' || symb.charAt(i) == '"'|| symb.charAt(i) == ',')
+			if(symb.charAt(i) == '[' || symb.charAt(i) == '"'|| symb.charAt(i) == ','|| symb.charAt(i) == ']')
 			{
 				if(str != "t")
 					{
-//						System.out.println( str );
 						allSymbols.add(str) ; 
 						str = "t" ; 
 					}
@@ -78,15 +128,8 @@ public class BitfinexAPI {
 			else
 			{
 				str = str + symb.toUpperCase().charAt(i) ; 
-//				System.out.println( str  + " hinzugefügt");
 			}
 		}
-		
-//		for(int x = 0 ; x < allSymbols.size() ; x++)
-//		{
-//			System.out.println(allSymbols.get(x));
-//		}
-		
 		return allSymbols;
 	}
 	
