@@ -1,11 +1,14 @@
 package Bitfinex;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 public class Candle {
 	
-	int MTS ;
-	float[] Feld = new float[4];  
+	long MTS ;
+	float[] Feld = new float[5];  
 	
-	Candle(int MTS , float open , float close , float high , float low , float volume)
+	public Candle(long MTS , float open , float close , float high , float low , float volume)
 	{
 		this.setMTS(MTS);
 		this.setopen(open);
@@ -15,11 +18,11 @@ public class Candle {
 		this.setvolume(volume);
 	}
 	
-	public void setMTS(int MTS)
+	public void setMTS(long MTS)
 	{
 		this.MTS = MTS ; 
 	}
-	public int getMTS()
+	public long getMTS()
 	{
 		return this.MTS ; 
 	}
@@ -63,5 +66,15 @@ public class Candle {
 	public float getvolume()
 	{
 		return this.Feld[4] ; 
+	}
+	public String toString()
+	{
+
+        DateFormat shortDf = DateFormat.getDateInstance(DateFormat.SHORT);
+		return "" + shortDf.format(this.getDate()) + "  " + this.MTS + "  " + this.getopen() + "   " + this.getclose() + "  " + this.gethigh() + "  " + this.getlow() + "  " + this.getvolume() ; 
+	}
+	public Date getDate()
+	{
+		return new Date(this.MTS) ; 
 	}
 }
