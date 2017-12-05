@@ -1,5 +1,8 @@
 package Engine;
 
+import org.neuroph.core.NeuralNetwork;
+import org.neuroph.nnet.Perceptron;
+
 import Neuronen.SichtFeld;
 import Visualisierung.FrameHandler;
 import Visualisierung.UnsichtbaresFrame;
@@ -18,22 +21,8 @@ public class Tests {
 	public static void main(String[] args) throws InterruptedException 
 	{
 		
-		studie test = new studie(); 
-		auge = new SichtFeld(test.getWidth() , test.getHeight());
+		NeuralNetwork test = new Perceptron(2,4) ; 
 		
-		T1 = System.currentTimeMillis() ; 
-		while(true)
-		{
-			T2 = T1 ; 
-			Thread.sleep(60);
-			
-			
-			test.update(T3);
-			
-			
-			T1 = System.currentTimeMillis() ; 
-			T3 = (int) (T1 - T2) ; 
-		}
 	}
 
 }

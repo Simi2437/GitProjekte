@@ -4,7 +4,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 public class Candle {
-	
+	public static final int lengh = 6 ; 
 	long MTS ;
 	float[] Feld = new float[5];  
 	
